@@ -23,7 +23,7 @@ public class GraphicsSystem extends LBUGraphics {
     private JMenuItem loadImage;
     private JMenuItem saveCommand;
     private JMenuItem loadCommand;
-    private JMenuItem colorPicker;
+    private JButton colorPicker;
     private boolean drawFilledShape = false;
     private boolean isCommandFileSaved = false;
 
@@ -54,6 +54,7 @@ public class GraphicsSystem extends LBUGraphics {
         frame.add(this);
         warningClosing(frame);
         setupMenuBar();
+        setupBtnColorPicker();
         frame.setVisible(true);
 
         reset();
@@ -72,10 +73,8 @@ public class GraphicsSystem extends LBUGraphics {
         saveCommand = new JMenuItem("Save Command");
         loadImage = new JMenuItem("Load Image");
         saveImage = new JMenuItem("Save Image");
-        colorPicker = new JMenuItem("Color Picker");
 
         menuBar.add(options);
-        options.add(colorPicker);
         options.add(loadImage);
         options.add(saveImage);
         options.add(loadCommand);
@@ -83,12 +82,17 @@ public class GraphicsSystem extends LBUGraphics {
 
         super.add(menuBar);
 
-        colorPicker.addActionListener(this);
         loadCommand.addActionListener(this);
         saveCommand.addActionListener(this);
         loadImage.addActionListener(this);
         saveImage.addActionListener(this);
 
+    }
+
+    public void setupBtnColorPicker(){
+        colorPicker = new JButton("Color Picker");
+        super.add(colorPicker);
+        colorPicker.addActionListener(this);
     }
 
     /*
@@ -559,8 +563,8 @@ public class GraphicsSystem extends LBUGraphics {
         response = fileChooser.showSaveDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
             storeCommandToFile(commandToFile, fileChooser.getSelectedFile());
+            isCommandFileSaved = true;
         }
-        isCommandFileSaved = true;
     }
 
     public void storeCommandToFile(String commandStr) {
