@@ -1,0 +1,9 @@
+clear
+reset
+triangle 100
+forward 200
+turnright 90
+forward 100
+turnright 90
+forward 100
+save
