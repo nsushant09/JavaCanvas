@@ -68,17 +68,17 @@ public class GraphicsSystem extends LBUGraphics {
     public void setupMenuBar() {
 
         JMenuBar menuBar = new JMenuBar();
-        JMenu options = new JMenu("Options");
+        JMenu menu = new JMenu("Menu");
         loadCommand = new JMenuItem("Load Command");
         saveCommand = new JMenuItem("Save Command");
         loadImage = new JMenuItem("Load Image");
         saveImage = new JMenuItem("Save Image");
 
-        menuBar.add(options);
-        options.add(loadImage);
-        options.add(saveImage);
-        options.add(loadCommand);
-        options.add(saveCommand);
+        menuBar.add(menu);
+        menu.add(loadImage);
+        menu.add(saveImage);
+        menu.add(loadCommand);
+        menu.add(saveCommand);
 
         super.add(menuBar);
 
@@ -89,7 +89,7 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
-    public void setupBtnColorPicker(){
+    public void setupBtnColorPicker() {
         colorPicker = new JButton("Color Picker");
         super.add(colorPicker);
         colorPicker.addActionListener(this);
@@ -591,7 +591,6 @@ public class GraphicsSystem extends LBUGraphics {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void warningClosing(Frame frame) {

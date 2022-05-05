@@ -6,4 +6,58 @@ turnright 90
 forward 100
 turnright 90
 forward 100
-save
+saveforward 100
+turnright 90
+yellow
+forward 100
+penup
+forward 100
+turnright 90
+pendown
+turnright 180
+backward 100
+circle 50
+fill
+triangle 100
+white
+fill
+circle 25
+fill
+circle 40
+changefill
+changefill
+changefill
+changefill
+fill
+fill
+circle 50
+clear
+reset
+forward 100
+turnright 90
+yellow
+forward 100
+penup
+forward 100
+turnright 90
+pendown
+turnright 180
+backward 100
+circle 50
+fill
+triangle 100
+white
+fill
+circle 25
+fill
+circle 40
+changefill
+changefill
+changefill
+changefill
+fill
+fill
+circle 50
+about
+clear
+reset
