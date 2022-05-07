@@ -18,7 +18,6 @@ import java.util.Scanner;
 
 public class GraphicsSystem extends LBUGraphics {
 
-    private final Graphics g = getGraphicsContext();
     private JMenuItem saveImage;
     private JMenuItem loadImage;
     private JMenuItem saveCommand;
@@ -26,10 +25,12 @@ public class GraphicsSystem extends LBUGraphics {
     private JButton colorPicker;
     private boolean drawFilledShape = false;
     private boolean isCommandFileSaved = false;
+    private final Graphics g = getGraphicsContext();
 
+
+    private boolean firstProcessCommand = true;
+    boolean shapePositionReset = false;
     ArrayList<String> commandToFile = new ArrayList<>();
-
-    Boolean shapePositionReset = false;
     ArrayList<CircleDetails> circleDetailsArrayList = new ArrayList<CircleDetails>();
     ArrayList<TriangleDetails> triangleDetailsArrayList = new ArrayList<TriangleDetails>();
 
@@ -39,6 +40,7 @@ public class GraphicsSystem extends LBUGraphics {
      * Adds Actions Listener to Color Picker Button
      * Add Color Picker Button to the panel
      * */
+
     GraphicsSystem() {
 
         super();
@@ -104,6 +106,7 @@ public class GraphicsSystem extends LBUGraphics {
 
         if (arg0.getSource() == colorPicker) {
             Color color = JColorChooser.showDialog(null, "Pick a color...", Color.RED);
+            commandToFile.add("pen "+color.getRed()+" "+color.getGreen()+" "+color.getBlue());
             setPenColour(color);
             g.setColor(color);
         } else if (arg0.getSource() == loadCommand) {
@@ -120,8 +123,6 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
-
-    private boolean firstProcessCommand = true;
 
     @Override
     public void processCommand(String s) {
@@ -144,6 +145,7 @@ public class GraphicsSystem extends LBUGraphics {
         commandToFile.add(s);
         isCommandFileSaved = false;
 
+        //returning the total number of commands string passed in text field
         while (scanString.hasNext()) {
             commandStringsList.add(scanString.next());
             commandStringCount++;
@@ -216,6 +218,7 @@ public class GraphicsSystem extends LBUGraphics {
         }
 
 
+        // checking string with colors
         for (Colors colorElement : colorsList) {
             if (colorElement.colorName.equalsIgnoreCase(s)) {
                 setPenColour(colorElement.color);
@@ -226,6 +229,7 @@ public class GraphicsSystem extends LBUGraphics {
         }
 
 
+        // checking string with command that require no parameters
         switch (s.toLowerCase()) {
             case "about" -> {
                 about();
@@ -353,13 +357,7 @@ public class GraphicsSystem extends LBUGraphics {
         }
     }
 
-    /*
-     * List that stores recently drawn circle details
-     * Details used later to change fillings
-     * shapePositionReset used to set the position of turtle for first circle
-     * Draws the circle using drawOval
-     * Set's X and Y position for upcoming circle
-     * */
+
     @Override
     public void circle(int radius) {
 
@@ -387,9 +385,7 @@ public class GraphicsSystem extends LBUGraphics {
         int lengthA;
         int lengthB;
         int lengthC;
-        if (arrayList.size() == 1) {
-            displayMessage("Valid command with missing parameter.");
-        } else if (arrayList.size() == 2) {
+        if (arrayList.size() == 2) {
             try {
                 lengthA = Integer.parseInt(arrayList.get(1));
             } catch (NumberFormatException numberFormatException) {
@@ -449,14 +445,10 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
-    /*
-     * Additional Pen Command
-     * */
     void setPenColorRGB(ArrayList<String> arrayList) {
         int red;
         int green;
         int blue;
-
         if (arrayList.size() < 4) {
             displayMessage("Valid command with missing parameter.");
             return;
@@ -479,6 +471,7 @@ public class GraphicsSystem extends LBUGraphics {
             displayMessage("Non sensible value detected");
         } else {
             setPenColour(new Color(red, green, blue));
+            g.setColor(new Color(red, green, blue));
             displayMessage("Pen Colour Changed.");
         }
 
@@ -503,6 +496,12 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
+    /*
+    Takes image to be resized, width and height to be set as parameter
+    Resizes image with .getScaledInstance
+    create a graphics of given size
+    disposes graphics and returns resized image
+    * */
     BufferedImage resize(BufferedImage image, int width, int height) {
         Image temp = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -533,6 +532,7 @@ public class GraphicsSystem extends LBUGraphics {
         JFileChooser fileChooser = new JFileChooser();
         response = fileChooser.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
+            newClear();
             loadCommandFromFile(fileChooser.getSelectedFile().getAbsolutePath());
         } else {
             displayMessage("No file chosen");

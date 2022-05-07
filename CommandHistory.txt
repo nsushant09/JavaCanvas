@@ -61,3 +61,76 @@ circle 50
 about
 clear
 reset
+triangle
+triangle 100
+triangle 100 35 67
+triangle 100 300
+circle 100
+circle 50
+fill
+circle 50
+fill
+white
+circle 25
+clear 
+reset
+new
+circle 100
+circle 50
+fill
+pen 255 0 255
+circle 50
+fill
+white
+circle 25
+pen 255 0 255
+circle 20
+fill
+circle 50
+new
+circle 100
+circle 50
+fill
+pen 255 0 255
+circle 50
+fill
+white
+circle 25
+circle 50
+fill
+circle 50
+new
+reset
+clear
+white
+pen 51 51 255
+circle 50
+fill
+circle 50
+pen 51 51 255
+circle 50
+fill
+circle 50
+pen 51 51 255 
+circle
+circle 50
+pen 51 51 255
+circle 50
+new
+pen 255 0 255
+fill
+circle 100
+circle 50
+new
+reset
+circle 50
+pen 255 255 255
+circle 25
+pen 10 20 30
+circle 10
+circle 200
+cirlce 50
+circle 50
+pen 255 0 255
+forward 100
+circle 50
