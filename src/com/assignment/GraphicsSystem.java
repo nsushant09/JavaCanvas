@@ -1,5 +1,8 @@
 package com.assignment;
 
+import com.assignment.shapesdetails.CircleDetails;
+import com.assignment.shapesdetails.RectangleDetails;
+import com.assignment.shapesdetails.TriangleDetails;
 import uk.ac.leedsbeckett.oop.LBUGraphics;
 
 import javax.imageio.ImageIO;
@@ -33,6 +36,7 @@ public class GraphicsSystem extends LBUGraphics {
     ArrayList<String> commandToFile = new ArrayList<>();
     ArrayList<CircleDetails> circleDetailsArrayList = new ArrayList<CircleDetails>();
     ArrayList<TriangleDetails> triangleDetailsArrayList = new ArrayList<TriangleDetails>();
+    ArrayList<RectangleDetails> rectangleDetailsArrayList = new ArrayList<RectangleDetails>();
 
     /*
      * Constructor
@@ -131,7 +135,7 @@ public class GraphicsSystem extends LBUGraphics {
         int parameterValue;
         Scanner scanString = new Scanner(s);
         ArrayList<String> commandStringsList = new ArrayList<String>(2);
-        String[] CommandWithParameterList = {"turnleft", "turnright", "forward", "backward", "pen", "stroke", "circle", "triangle"};
+        String[] CommandWithParameterList = {"turnleft", "turnright", "forward", "backward", "pen", "stroke", "circle", "triangle", "rectangle"};
         Colors[] colorsList = {new Colors("black", Color.BLACK), new Colors("red", Color.RED), new Colors("green", Color.GREEN), new Colors("white", Color.WHITE), new Colors("yellow", Color.YELLOW)};
 
 
@@ -203,9 +207,11 @@ public class GraphicsSystem extends LBUGraphics {
                                     displayMessage("Circle of radius " + parameterValue + " drawn");
                                 }
                             }
-
                             case "triangle" -> {
                                 triangle(commandStringsList);
+                            }
+                            case "rectangle" -> {
+                                rectangle(commandStringsList);
                             }
 
                         }
@@ -270,11 +276,23 @@ public class GraphicsSystem extends LBUGraphics {
             }
 
             case "changefill" -> {
-                if (circleDetailsArrayList.size() == 0) {
-                    displayMessage("No circles to be filled");
+                if (circleDetailsArrayList.size() == 0 && rectangleDetailsArrayList.size() == 0 && triangleDetailsArrayList.size() == 0) {
+                    displayMessage("No shapes to be reversed");
                 } else {
 
+                    for(TriangleDetails triangle : triangleDetailsArrayList){
+                        g.setColor(triangle.getShapeColor());
+                       if(triangle.isTriangleFilled()){
+                           g.clearRect(triangle.getxPoints()[0] - triangle.getLengthA(), triangle.getyPoints()[0] + 1, triangle.getLengthB() * 2, Math.max(triangle.getLengthA(), triangle.getLengthC()));
+                           g.drawPolygon(triangle.getxPoints(), triangle.getyPoints(), 3);
+                           triangle.changeFilling();
+                       }else{
+                           g.fillPolygon(triangle.getxPoints(), triangle.getyPoints(), 3);
+                           triangle.changeFilling();
+                       }
+                    }
                     for (CircleDetails circle : circleDetailsArrayList) {
+                        g.setColor(circle.getShapeColor());
                         if (circle.isCircleFilled()) {
                             g.clearRect(circle.getCircleXpos(), circle.getCircleYpos(), circle.getWidth(), circle.getHeight());
                             g.drawOval(circle.getCircleXpos(), circle.getCircleYpos(), circle.getWidth(), circle.getHeight());
@@ -284,7 +302,19 @@ public class GraphicsSystem extends LBUGraphics {
                             circle.changeFilling();
                         }
                     }
-                    displayMessage("Circle Filling Reversed.");
+                    for (RectangleDetails rectangle : rectangleDetailsArrayList) {
+                        g.setColor(rectangle.getShapeColor());
+                        if (rectangle.isRectangleFilled()) {
+                            g.clearRect(rectangle.getRectXpos(), rectangle.getRectYpos(), rectangle.getLength(), rectangle.getBreadth());
+                            g.drawRect(rectangle.getRectXpos(), rectangle.getRectYpos(), rectangle.getLength(), rectangle.getBreadth());
+                            rectangle.changeFilling();
+                        } else {
+                            g.fillRect(rectangle.getRectXpos(), rectangle.getRectYpos(), rectangle.getLength(), rectangle.getBreadth());
+                            rectangle.changeFilling();
+                        }
+                    }
+
+                    displayMessage("Filling Reversed.");
                 }
             }
 
@@ -372,7 +402,7 @@ public class GraphicsSystem extends LBUGraphics {
         } else {
             g.drawOval(getxPos(), getyPos(), radius * 2, radius * 2);
         }
-        circleDetailsArrayList.add(new CircleDetails(getxPos(), getyPos(), radius, drawFilledShape));
+        circleDetailsArrayList.add(new CircleDetails(getxPos(), getyPos(), radius, drawFilledShape, getPenColour()));
         setxPos(getxPos() + radius * 3);
 
         if (getxPos() >= 900) {
@@ -435,7 +465,7 @@ public class GraphicsSystem extends LBUGraphics {
         } else {
             g.drawPolygon(xPoints, yPoints, 3);
         }
-        triangleDetailsArrayList.add(new TriangleDetails(xPoints, yPoints, drawFilledShape));
+        triangleDetailsArrayList.add(new TriangleDetails(xPoints, yPoints,lengthA, lengthB, lengthC, drawFilledShape, getPenColour()));
         setxPos(getxPos() + lengthB + 10);
         displayMessage("Traingle drawn.");
         if (getxPos() >= 900) {
@@ -443,6 +473,51 @@ public class GraphicsSystem extends LBUGraphics {
             setyPos(210);
         }
 
+    }
+
+    public void rectangle(ArrayList<String> arrayList) {
+        int length;
+        int breadth;
+
+
+        if (arrayList.size() == 3) {
+            try {
+                length = Integer.parseInt(arrayList.get(1));
+                breadth = Integer.parseInt(arrayList.get(2));
+            } catch (NumberFormatException numberFormatException) {
+                displayMessage("Non numeric data for parameter.");
+                return;
+            }
+            if (length > 200 || breadth > 200 ) {
+                displayMessage("Cannot create rectangle greater than length 200");
+            } else {
+                drawRectangle(length, breadth);
+            }
+        } else {
+            displayMessage("Invalid amount of parameters.");
+        }
+
+    }
+
+    void drawRectangle(int length, int breadth){
+        if (!shapePositionReset) {
+            setxPos(100);
+            setyPos(100);
+            shapePositionReset = true;
+        }
+        if (drawFilledShape) {
+            g.fillRect(getxPos(), getyPos(), length, breadth);
+        } else {
+            g.drawRect(getxPos(), getyPos(), length, breadth);
+        }
+
+        rectangleDetailsArrayList.add(new RectangleDetails(getxPos(), getyPos(), length, breadth, drawFilledShape, getPenColour()));
+        setxPos((int) (getxPos() + length * 1.5));
+        displayMessage("Rectangle drawn drawn.");
+        if (getxPos() >= 900) {
+            setxPos(100);
+            setyPos(210);
+        }
     }
 
     void setPenColorRGB(ArrayList<String> arrayList) {
