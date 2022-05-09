@@ -28,6 +28,7 @@ public class GraphicsSystem extends LBUGraphics {
     private JButton colorPicker;
     private boolean drawFilledShape = false;
     private boolean isCommandFileSaved = false;
+    private boolean isImageFileSaved = false;
     private final Graphics g = getGraphicsContext();
 
 
@@ -71,6 +72,12 @@ public class GraphicsSystem extends LBUGraphics {
         new GraphicsSystem();
     }
 
+    /*
+    * Create instance of Menu bar
+    * Create instances of MenuItems
+    * Adds menu to frame.
+    * Adds listener to each of the menuItems
+    * */
     public void setupMenuBar() {
 
         JMenuBar menuBar = new JMenuBar();
@@ -95,6 +102,12 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
+
+    /*
+    * Instance of JButton
+    * Added to frame
+    * Adds instance to the actionListener
+    * */
     public void setupBtnColorPicker() {
         colorPicker = new JButton("Color Picker");
         super.add(colorPicker);
@@ -128,6 +141,17 @@ public class GraphicsSystem extends LBUGraphics {
     }
 
 
+    /*
+    * Method named processCommand that takes a string parameter
+    * If the function is called for very first time reset and clear is called
+    * The string parameter is saved to a textfile using storeCommandToFile()
+    * String parameter added to list to save on a specific file later on
+    * The total words in string is stored in commandStringCount
+    * All the words are added to commandStringList
+    * Since first element of command list should be the command
+    * It is then
+    * checked with commandWithParameterList, colorList and other command and acts accordingly
+    * */
     @Override
     public void processCommand(String s) {
 
@@ -148,6 +172,7 @@ public class GraphicsSystem extends LBUGraphics {
         storeCommandToFile(s);
         commandToFile.add(s);
         isCommandFileSaved = false;
+        isImageFileSaved = false;
 
         //returning the total number of commands string passed in text field
         while (scanString.hasNext()) {
@@ -322,6 +347,13 @@ public class GraphicsSystem extends LBUGraphics {
         }
     }
 
+    /*
+    * Overriding the reset() Method
+    * Sets turtle to center
+    * pen is set to down
+    * turtle faces downwards
+    * background color and stroke is reset
+    * */
     @Override
     public void reset() {
         this.xPos = 500;
@@ -335,17 +367,35 @@ public class GraphicsSystem extends LBUGraphics {
     }
 
 
+    /*
+    * Overriding the clear() Method
+    * Calls newClear() to clear screen
+    * Calls reset to reset the turtle
+    * */
     @Override
     public void clear() {
         newClear();
         reset();
     }
 
+    /*
+    * Method named newClear();
+    * Calls parent clear() Method
+    * Clears all element from specified lists.
+    * */
     public void newClear() {
         super.clear();
         circleDetailsArrayList.clear();
+        triangleDetailsArrayList.clear();
+        rectangleDetailsArrayList.clear();
     }
 
+    /*
+    * Overriding about() Method
+    * Calls parent about
+    * Set's turtle direction facing downwards
+    * Appends name when the method is called.
+    * */
     @Override
     public void about() {
         super.about();
@@ -354,6 +404,11 @@ public class GraphicsSystem extends LBUGraphics {
         g.drawString("Sushant Neupane", 200, 200);
     }
 
+    /*
+    * Method named backward which takes integer type amount as parameter
+    * It's makes the turtle move backwards by amount distance
+    * Could also use forward(- amount) for same purpose
+    * */
     public void backward(int amount) {
         turnLeft(180);
         penDown();
@@ -362,6 +417,11 @@ public class GraphicsSystem extends LBUGraphics {
     }
 
 
+    /*
+    * Method name setPenStroke that takes ArrayList of String as parameter
+    * This is because we need to specify the pen size as well as if it is dashed or not
+    * The first element will be stroke followed by pensize followed by dashed or null
+    * */
     public void setPenStroke(ArrayList<String> arrayList) {
         boolean dashed = false;
         int parameterValue;
@@ -388,6 +448,13 @@ public class GraphicsSystem extends LBUGraphics {
     }
 
 
+    /*
+    * Overriddien circle() method which takes a integer radius as parameter
+    * If any of the shapeMethod is called for the first time the shape will be drawn in the specified position
+    * The circle will be either filled or non filled depending on the command previously given
+    * The value of circle is added to a list so that it's fillings can be reversed later on
+    * The position of turtle is set in such a way that non of the shapes will overlap
+    * */
     @Override
     public void circle(int radius) {
 
@@ -411,6 +478,13 @@ public class GraphicsSystem extends LBUGraphics {
         }
     }
 
+
+
+    /*
+    * Method named triangle() that takes a list of string as parameter
+    * Validates the command accordingly
+    * Calls drawTriangle() method for actual drawing.
+    * */
     public void triangle(ArrayList<String> arrayList) {
         int lengthA;
         int lengthB;
@@ -444,6 +518,13 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
+    /*
+     * Method named drawTriangle() that takes length of three sides as parameter
+     * If any of the shapeMethod is called for the first time the shape will be drawn in the specified position
+     * The triangle will be either filled or non filled depending on the command previously given
+     * The value of triangle is added to a list so that it's fillings can be reversed later on
+     * The position of turtle is set in such a way that non of the shapes will overlap
+     * */
     void drawTriangle(int lengthA, int lengthB, int lengthC) {
 
         if (!shapePositionReset) {
@@ -475,10 +556,14 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
+    /*
+     * Method named rectangle() that takes a list of string as parameter
+     * Validates the command accordingly
+     * Calls drawRectangle() method for actual drawing.
+     * */
     public void rectangle(ArrayList<String> arrayList) {
         int length;
         int breadth;
-
 
         if (arrayList.size() == 3) {
             try {
@@ -499,6 +584,13 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
+    /*
+     * Method named drawRectangle() that takes length of three sides as parameter
+     * If any of the shapeMethod is called for the first time the shape will be drawn in the specified position
+     * The rectangle will be either filled or non filled depending on the command previously given
+     * The value of rectangle is added to a list so that it's fillings can be reversed later on
+     * The position of turtle is set in such a way that non of the shapes will overlap
+     * */
     void drawRectangle(int length, int breadth){
         if (!shapePositionReset) {
             setxPos(100);
@@ -520,6 +612,11 @@ public class GraphicsSystem extends LBUGraphics {
         }
     }
 
+    /*
+    * Method names setPenColorRGB() that takes a list as parameter
+    * Validates the command
+    * Set's the RGB color to the pen as well as Graphics instance
+    * */
     void setPenColorRGB(ArrayList<String> arrayList) {
         int red;
         int green;
@@ -552,6 +649,14 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
+    /*
+    * Method named loadImage()
+    * Creates a instance of JFileChooser (GUI) to choose files
+    * Calls the .showOpenDialog() method and saves the received response to a variable named response
+    * Reads the image choosen from fileChooser and saves it' to loadedImage
+    * Resizes the Image to frame's dimensions
+    * Set's the Image to the frame
+    * */
     void loadImage() {
         int response;
         JFileChooser fileChooser = new JFileChooser();
@@ -571,11 +676,15 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
+
     /*
-    Takes image to be resized, width and height to be set as parameter
-    Resizes image with .getScaledInstance
-    create a graphics of given size
-    disposes graphics and returns resized image
+    * Method named resize() that takes image, width and height as parameter
+    * Creates a temporary image of desired size
+    * Creates a reference variable named resized of desired size to use for graphics
+    * Create a instance of Graphics2D named graphics2d and initialized it with resized.createGraphics()
+    * Draws the saved temporary image to graphics2d which saved the image to resized
+    * Disposed the graphics2d
+    * return the resized Image
     * */
     BufferedImage resize(BufferedImage image, int width, int height) {
         Image temp = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
@@ -586,6 +695,12 @@ public class GraphicsSystem extends LBUGraphics {
         return resized;
     }
 
+    /*
+     * Method named saveImage()
+     * Creates a instance of JFileChooser (GUI) to choose files
+     * Calls the .showOpenDialog() method and saves the received reponse to a variable named response
+     * Writes the image to the file choosen from fileChooser in png Format
+     * */
     void saveImage() {
         int response;
         JFileChooser fileChooser = new JFileChooser();
@@ -593,6 +708,7 @@ public class GraphicsSystem extends LBUGraphics {
         if (response == JFileChooser.APPROVE_OPTION) {
             try {
                 ImageIO.write(getBufferedImage(), "png", fileChooser.getSelectedFile());
+                isImageFileSaved = true;
                 displayMessage("Image Saved Successfully");
             } catch (IOException e) {
                 displayMessage("Failed to Save Image");
@@ -602,6 +718,12 @@ public class GraphicsSystem extends LBUGraphics {
         }
     }
 
+    /*
+    * Method named loadCommand()
+    * Creates a instance of JFileChooser (GUI) to choose files
+    * Calls the .showOpenDialog() method and saves the received response to a variable named response
+    * Calls newClear() and loadCommandFromFile() Method
+    * */
     public void loadCommand() {
         int response;
         JFileChooser fileChooser = new JFileChooser();
@@ -614,6 +736,13 @@ public class GraphicsSystem extends LBUGraphics {
         }
     }
 
+    /*
+    * Method named loadCommandFromFile() that takes the fileName as parameter
+    * Creates and instance of File with the fileName received as parameter
+    * Creates an instance of Scanner class to read through the file
+    * Read the file using while loop and .hasNextLine() method
+    * Passes each command i.e each line from file to processCommand(eachline) method
+    * */
     public void loadCommandFromFile(String fileName) {
 
         File file = new File(fileName);
@@ -632,6 +761,12 @@ public class GraphicsSystem extends LBUGraphics {
     }
 
 
+    /*
+     * Method named saveCommand()
+     * Creates a instance of JFileChooser (GUI) to choose files
+     * Calls the .showOpenDialog() method and saves the received response to a variable named response
+     * Calls storeCommandToFile() that takes list of string and fileName (String) as parameter
+     * */
     public void saveCommand() {
         int response;
         JFileChooser fileChooser = new JFileChooser();
@@ -642,6 +777,11 @@ public class GraphicsSystem extends LBUGraphics {
         }
     }
 
+    /*
+    * Method names storeCommandToFile() that takes a String command as parameter
+    * The given string is always stored in CommandHistory.txt automatically
+    * It is called in processCommand() method
+    * */
     public void storeCommandToFile(String commandStr) {
 
         File file = new File("CommandHistory.txt");
@@ -655,6 +795,12 @@ public class GraphicsSystem extends LBUGraphics {
 
     }
 
+    /*
+     * Method named storeCommandToFile() that takes the fileName and list of command stored as String as parameter
+     * Creates and instance of File with the fileName received as parameter and extends with .txt
+     * Creates an instance of FileWriter with file and set's true to append
+     * Uses a forEach loop to write each element of list to the file
+     * */
     public void storeCommandToFile(ArrayList<String> commandList, File fileName) {
         File file = new File(String.valueOf(fileName) + ".txt");
         try {
@@ -668,16 +814,49 @@ public class GraphicsSystem extends LBUGraphics {
         }
     }
 
+    /*
+    * Method named warningClosing that takes a Frame as a parameter
+    * calls the .addWindowListener() method of Frame class and passes a WindowAdapter()
+    * Overrides the WindowClosing() method
+    * If file is saved then the frame is closed
+    * Otherwise a .showConfirmDialog() is used from JOptionPane class
+    * It's response is saved to response
+    * If Yes is pressed the program will proceed to save the command
+    * If No is and if the image is saved  pressed the window is disposed
+    * If Cancle is pressed the user is taken back to the screen
+    * Similar processed is also applied for closing the window but checks if the image is saved or not.
+    * */
     public void warningClosing(Frame frame) {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (isCommandFileSaved) {
-                    e.getWindow().dispose();
+                    if(isImageFileSaved){
+                        e.getWindow().dispose();
+                    }else{
+                        e.getWindow();
+                    }
                 } else {
                     int response = JOptionPane.showConfirmDialog(null, "Do you want to save the command before exiting ?", "Close", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
                     if (response == JOptionPane.YES_OPTION) {
                         saveCommand();
+                    } else if (response == JOptionPane.NO_OPTION) {
+                        if(isImageFileSaved){
+                            e.getWindow().dispose();
+                        }else{
+                            e.getWindow();
+                        }
+                    } else {
+                        e.getWindow();
+                    }
+                }
+
+                if (isImageFileSaved) {
+                    e.getWindow().dispose();
+                } else {
+                    int response = JOptionPane.showConfirmDialog(null, "Do you want to save the Image before exiting ?", "Close", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                    if (response == JOptionPane.YES_OPTION) {
+                        saveImage();
                     } else if (response == JOptionPane.NO_OPTION) {
                         e.getWindow().dispose();
                     } else {
