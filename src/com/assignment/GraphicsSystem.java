@@ -64,6 +64,8 @@ public class GraphicsSystem extends LBUGraphics {
         setupBtnColorPicker();
         frame.setVisible(true);
 
+        about();
+
         reset();
     }
 
