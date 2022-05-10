@@ -16,6 +16,7 @@
  * Note : The class Color is used to store the information of Color i.e The name and Color itself
  *        The 3 details class are used to store the information of each shape such as position and it's size which is later used to change the fillings.
  *        The CommandHistory.txt file stores each and every command typed automatically
+ *        The CommandHistory.txt file cannot be loaded because it will add the same command in the file and run endlessly , Every other text file will work perfectly.
  * */
 
 package com.assignment;
