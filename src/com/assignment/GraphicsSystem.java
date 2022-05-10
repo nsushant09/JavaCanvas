@@ -227,7 +227,7 @@ public class GraphicsSystem extends LBUGraphics {
                                 setPenStroke(commandStringsList);
                             }
                             case "circle" -> {
-                                if (parameterValue > 50) {
+                                if (parameterValue > 100) {
                                     displayMessage("Cannot create a circle of raidus greater than 100.");
                                 } else {
                                     circle(parameterValue);
