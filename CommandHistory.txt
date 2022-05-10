@@ -4,3 +4,21 @@ forward 100
 forward 100
 forward 100
 forward 100
+stroke 100
+stroke 10
+forward 100
+stroke 4 dashed
+yellow
+turnright 
+turnright 90
+forward 100
+turnright 90
+red
+stroke 10
+forward 100
+yellow
+turnright 90
+stroke 4 dashed
+forward 100
+penup
+forward 100

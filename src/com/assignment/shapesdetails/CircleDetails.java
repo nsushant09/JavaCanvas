@@ -4,8 +4,8 @@ package com.assignment.shapesdetails;
 import java.awt.*;
 
 /*
-* Used as Data Class to store Circle Details to use when it's filling is to be changed.
-* */
+ * Used as Data Class to store Circle Details to use when it's filling is to be changed.
+ * */
 public class CircleDetails {
     private final int circleXpos;
     private final int circleYpos;
@@ -14,7 +14,7 @@ public class CircleDetails {
     private boolean isFilled;
     Color color;
 
-    public CircleDetails(int xpos, int ypos, int radius, boolean isFilled, Color color){
+    public CircleDetails(int xpos, int ypos, int radius, boolean isFilled, Color color) {
         this.circleXpos = xpos;
         this.circleYpos = ypos;
         this.width = radius * 2;
@@ -22,23 +22,32 @@ public class CircleDetails {
         this.isFilled = isFilled;
         this.color = color;
     }
-    public int getCircleXpos(){
+
+    public int getCircleXpos() {
         return circleXpos;
     }
-    public int getCircleYpos(){
+
+    public int getCircleYpos() {
         return circleYpos;
     }
-    public int getWidth(){
+
+    public int getWidth() {
         return width;
     }
-    public int getHeight(){
+
+    public int getHeight() {
         return height;
     }
-    public Color getShapeColor(){return color;}
-    public boolean isCircleFilled(){
+
+    public Color getShapeColor() {
+        return color;
+    }
+
+    public boolean isCircleFilled() {
         return isFilled;
     }
-    public void changeFilling(){
+
+    public void changeFilling() {
         isFilled = !isFilled;
     }
 }
